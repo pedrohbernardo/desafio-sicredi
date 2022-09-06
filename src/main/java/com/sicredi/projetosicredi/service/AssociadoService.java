@@ -23,8 +23,6 @@ public class AssociadoService {
 
     private AssociadoMapper mapper;
 
-    private CpfValidateUtil cpfUtil;
-
     public ResponseEntity<Associado> create(AssociadoDTO associado) {
         Optional<Associado> associadoEncontrado = repository.findByCpf(associado.getCpf());
         if (associadoEncontrado.isPresent()) {
@@ -53,14 +51,5 @@ public class AssociadoService {
         }
         throw new AssociadoNaoEncontradoException(Constants.ASSOCIADO_INEXISTENTE);
     }
-
-//    public ResponseEntity<StatusDTO> podeVotar (String cpf) {
-//        Optional<Associado> associadoEncontrado = repository.findByCpf(cpf);
-//        if(associadoEncontrado.isPresent()) {
-//            // procurar se já existe um voto associado a ele
-//            StatusDTO status = associadoEncontrado.get().
-//            return ResponseEntity.ok()
-//        }
-//    }
 
 }
