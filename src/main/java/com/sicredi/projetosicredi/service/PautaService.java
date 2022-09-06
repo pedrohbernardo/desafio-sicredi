@@ -37,8 +37,8 @@ public class PautaService {
         Optional<Pauta> pautaEncontrada = repository.findById(id);
         if (pautaEncontrada.isPresent()) {
             Pauta iniciarPauta = pautaEncontrada.get();
-            LocalDateTime horaAtual = LocalDateTime.now();
             if (iniciarPauta.getStatusPauta() != Boolean.TRUE) {
+                LocalDateTime horaAtual = LocalDateTime.now();
                 if (iniciarPauta.getTempoFinalPauta() == null) {
                     iniciarPauta.setStatusPauta(Boolean.TRUE);
                     iniciarPauta.setTempoFinalPauta(horaAtual.plusMinutes(iniciarPauta.getTempoDuracaoPauta()));
@@ -47,20 +47,19 @@ public class PautaService {
                 }
                 return Constants.PAUTA_FINALIZADA;
             }
-            return encerrarPauta(iniciarPauta);
+            return Constants.PAUTA_EM_ANDAMENTO;
         }
         throw new PautaNaoEncontradaException(Constants.PAUTA_INEXISTENTE);
     }
 
-    public String encerrarPauta(Pauta pauta) {
-        if (pauta.getStatusPauta() == Boolean.TRUE) {
+    public void encerrarPautas() {
+        List<Pauta> pautas = repository.findAllByStatusPautaIsTrue();
+        pautas.forEach(pauta -> {
             if (pauta.getTempoFinalPauta().isBefore(LocalDateTime.now())) {
                 pauta.setStatusPauta(Boolean.FALSE);
                 repository.save(pauta);
             }
-            return Constants.PAUTA_EM_ANDAMENTO;
-        }
-        return Constants.PAUTA_FINALIZADA;
+        });
     }
 
     public Pauta getPauta(Long id) {
@@ -90,8 +89,19 @@ public class PautaService {
                     voto -> voto.getVotou().equals(Boolean.FALSE)).count());
             resultadoPauta.setQuantidadeVotosSim(votos.stream().filter(
                     voto -> voto.getVotou().equals(Boolean.TRUE)).count());
+            resultadoPauta.setStatusPauta(statusPauta(pautaEncontrada.get()));
             return resultadoPauta;
         }
         throw new PautaNaoEncontradaException(Constants.PAUTA_INEXISTENTE);
+    }
+
+    public String statusPauta(Pauta pauta) {
+        if (pauta.getStatusPauta().equals(Boolean.FALSE)) {
+            if (pauta.getTempoFinalPauta() != null) {
+                return Constants.PAUTA_FINALIZADA;
+            }
+            return Constants.PAUTA_NAO_INICIADA;
+        }
+        return Constants.PAUTA_EM_ANDAMENTO;
     }
 }

@@ -7,6 +7,7 @@ public class Constants {
     public static final String PAUTA_FINALIZADA = "Esta Pauta já foi finalizada!";
     public static final String PAUTA_EM_ANDAMENTO = "Esta Pauta está em Andamento";
     public static final String PAUTA_DELETADA = "Pauta Removida";
+    public static final String PAUTA_NAO_INICIADA = "Esta Pauta não foi iniciada";
 
     public static final String CPF_INVALIDO = "CPF Inválido";
 
