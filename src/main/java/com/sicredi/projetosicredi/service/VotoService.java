@@ -47,8 +47,10 @@ public class VotoService {
                     return Constants.VOTO_REGISTRADO;
                 }
                 throw new AssociadoNaoEncontradoException(Constants.ASSOCIADO_INEXISTENTE);
+            } else if (pautaEncontrada.get().getTempoFinalPauta() != null) {
+                return Constants.PAUTA_FINALIZADA;
             }
-            return Constants.PAUTA_FINALIZADA;
+            return Constants.PAUTA_NAO_INICIADA;
         }
         throw new PautaNaoEncontradaException(Constants.PAUTA_INEXISTENTE);
     }

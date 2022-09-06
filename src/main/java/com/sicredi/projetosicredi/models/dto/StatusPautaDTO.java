@@ -14,4 +14,6 @@ public class StatusPautaDTO {
     private Long quantidadeVotosSim;
 
     private Long quantidadeVotosNao;
+
+    private String statusPauta;
 }
